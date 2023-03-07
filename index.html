@@ -6,8 +6,116 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
   </head>
-
   <body>
-    <h1>Prueba Jurgen</h1>
+    <h1>Tabla de paises Europeos</h1>
+    <span>Informacion traida desde restcountries.com</span><br>
+    <span>Creado por: Sebastian Dosman - Jurgen Sanclemente - Andres Mauricio Bonilla - Juan Pablo Tascon</span>
+    <hr>
+    <div>
+
+    </div>
+
+    <style>
+
+      body{
+        padding: 50px;
+      }
+    </style>
+    <script>
+
+      const obtenerPaises = () =>{
+        console.log("Entro")
+        try{
+          fetch('https://restcountries.com/v3.1/region/europe')
+          .then(response => response.json())
+          .then(data =>{
+
+            generarTabla( data )
+            console.log( data )
+          });
+        } 
+        catch( err ){
+          alert( "Error -> ", err )
+        }
+
+      }
+
+      const generarTabla = ( data = [] ) =>{
+          
+          var body = document.getElementsByTagName("div")[0];
+          var tabla   = document.createElement("table");
+          var tblBody = document.createElement("tbody");
+
+          var titulo    = document.createTextNode("Nombre pais")
+          var capital   = document.createTextNode("Nombre capital")
+          var poblacion = document.createTextNode("N Poblacion")
+          var horario   = document.createTextNode("Zona horaria")
+
+          var filaTitulo = document.createElement("tr")
+
+          let celdaTitulo     = document.createElement("td")
+          let celdaCapital    = document.createElement("td")
+          let celdaPoblacion  = document.createElement("td")
+          let celdaHorario    = document.createElement("td")
+
+          celdaTitulo   .appendChild( titulo )
+          celdaCapital  .appendChild( capital )
+          celdaHorario  .appendChild( horario )
+          celdaPoblacion.appendChild( poblacion )
+          
+          filaTitulo.appendChild( celdaTitulo     )
+          filaTitulo.appendChild( celdaCapital    )
+          filaTitulo.appendChild( celdaPoblacion  )
+          filaTitulo.appendChild( celdaHorario    )
+
+
+          celdaTitulo.style.backgroundColor     = "#FFC0CB"
+          celdaCapital.style.backgroundColor    = "#FFC0CB"
+          celdaPoblacion.style.backgroundColor  = "#FFC0CB"
+          celdaHorario.style.backgroundColor    = "#FFC0CB"
+
+          tblBody.append(filaTitulo)
+
+          for (var i = 0; i < data.length; i++) {
+            
+            var hilera = document.createElement("tr");
+            for (var j = 0; j < 4; j++) {
+
+              
+              var celda = document.createElement("td");
+
+              if( j == 0 ){
+
+                var textoCelda = document.createTextNode( data[i].name.common );
+              }
+              else if( j == 1 ){
+                var textoCelda = document.createTextNode( data[i].capital );
+              }
+              else if( j == 2 ){
+                var textoCelda = document.createTextNode( data[i].population );
+              }
+              else if( j == 3 ){
+                var textoCelda = document.createTextNode( data[i].timezones[0] );
+              }
+              celda.style.border = "1px solid black"
+              celda.appendChild(textoCelda);
+              hilera.appendChild(celda);
+            }
+            
+            tblBody.appendChild(hilera);
+          }
+        
+          // posiciona el <tbody> debajo del elemento <table>
+          tabla.appendChild(tblBody);
+          // appends <table> into <body>
+          body.appendChild(tabla);
+          // modifica el atributo "border" de la tabla y lo fija a "2";
+          tabla.setAttribute("border", "2");
+          tabla.setAttribute("cellpadding","10")
+          tabla.setAttribute("width","100%")
+          
+      }
+      obtenerPaises()
+    </script>
   </body>
 </html>
